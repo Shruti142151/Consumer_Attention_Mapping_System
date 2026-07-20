@@ -11,6 +11,8 @@ from behavior_analysis import BehaviorAnalyzer
 
 from heatmap_geneartion import HeatmapGenerator
 
+from product_scoring import ProductScoringEngine
+
 
 # Load YOLO model
 model = YOLO("yolov8n.pt")
@@ -24,6 +26,7 @@ attention_tracker = AttentionTracker()
 product_tracker = ProductInteractionTracker()
 behavior_analyzer = BehaviorAnalyzer()
 heatmap_geneartor = HeatmapGenerator()
+product_scoring = ProductScoringEngine()
 
 
 # OpenCV window setup
