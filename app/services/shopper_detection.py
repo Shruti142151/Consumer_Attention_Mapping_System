@@ -9,6 +9,8 @@ from product_interaction import ProductInteractionTracker
 
 from behavior_analysis import BehaviorAnalyzer
 
+from heatmap_geneartion import HeatmapGenerator
+
 
 # Load YOLO model
 model = YOLO("yolov8n.pt")
@@ -21,6 +23,7 @@ session_tracker = SessionTracker()
 attention_tracker = AttentionTracker()
 product_tracker = ProductInteractionTracker()
 behavior_analyzer = BehaviorAnalyzer()
+heatmap_geneartor = HeatmapGenerator()
 
 
 # OpenCV window setup
@@ -81,6 +84,11 @@ while True:
             # Center point for path tracking
             center_x = int((x1 + x2) / 2)
             center_y = int((y1 + y2) / 2)
+
+            heatmap_geneartor.add_attention_point(
+                center_x,
+                center_y
+            )
 
 
             shopper_paths[track_id].append(
@@ -145,6 +153,13 @@ while True:
                     2
                 )
 
+    # Generate heatmap
+    heatmap = heatmap_geneartor.generate_heatmap()
+
+    cv2.imshow(
+        "Attention Heatmap",
+        heatmap
+    )
 
     # Display output
     cv2.imshow(
