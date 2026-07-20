@@ -5,6 +5,10 @@ from collections import defaultdict
 from attention_analysis import AttentionTracker
 from session_tracking import SessionTracker
 
+from product_interaction import ProductInteractionTracker
+
+from behavior_analysis import BehaviorAnalyzer
+
 
 # Load YOLO model
 model = YOLO("yolov8n.pt")
@@ -15,6 +19,8 @@ shopper_paths = defaultdict(list)
 
 session_tracker = SessionTracker()
 attention_tracker = AttentionTracker()
+product_tracker = ProductInteractionTracker()
+behavior_analyzer = BehaviorAnalyzer()
 
 
 # OpenCV window setup
@@ -57,6 +63,10 @@ while True:
             attention_tracker.start_attention(track_id)
 
             duration = attention_tracker.get_attention_duration(track_id)
+
+            behavior_analyzer.update_shopper(shopper_id=track_id, attention_time=duration)
+
+            segment = behavior_analyzer.classify_shopper(track_id)
 
 
             # Session tracking
@@ -108,6 +118,16 @@ while True:
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.8,
                 (255, 255, 0),
+                2
+            )
+
+            cv2.putText(
+                frame,
+                f"Type:{segment}",
+                (50, 110),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (0, 255, 255),
                 2
             )
 
